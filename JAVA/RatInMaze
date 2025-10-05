@@ -1,0 +1,43 @@
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
+
+public class RatInMaze {
+	public static void solve(int[][] maze, int row, int col, int[][] temp, int n, String resStr, List<String> res){
+		// base case 
+		if(row == n - 1 && col == n - 1) {
+			res.add(resStr);
+			return;
+		}
+		
+		// directions  R, D, L, U
+		int[] dirX =  {0, 1, 0, -1 };
+		int[] dirY =  {1, 0, -1, 0 };
+		char[] move = {'R','D','L','U'};
+		for(int i = 0; i < 4; i++) {
+			int currX = row + dirX[i];
+			int currY = col + dirY[i];
+			
+			if(isSafe(maze, n, temp, currX, currY)) {
+				temp[currX][currY] = 1; // 1 => visited , 0 => not visited
+				solve(maze, currX, currY, temp, n, resStr + move[i] , res);
+				temp[currX][currY] = 0; // backtrack
+			}
+		}
+	}
+
+    public static boolean isSafe(int[][] maze, int n, int[][] temp, int x, int y) {
+        return (x >= 0 && y >= 0 && x < n && y < n && maze[x][y] == 1 && temp[x][y] == 0);
+    }
+	public static void main(String[] args) {
+		int[][] maze = {{1,0,0,0},{1,1,0,1},{1,1,0,0},{0,1,1,1}};
+		List<String> res = new ArrayList<>();
+		int n = maze.length;
+		int[][] temp = new int[n][n];
+		temp[0][0] = 1;
+		solve(maze, 0, 0, temp, n, "", res);
+		if(!res.isEmpty()) System.out.println("Possible Paths: " + res);
+		else System.out.println("Not any path found");
+	}
+
+}
