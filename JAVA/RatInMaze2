@@ -1,0 +1,56 @@
+import java.util.ArrayList;
+import java.util.List;
+
+public class RatInMaze2 {
+
+	public static void solve(int[][] maze, int row, int col, int[][] temp, int n, String resStr, List<String> res) {
+        // Base case: reached destination
+        if (row == n - 1 && col == n - 1 && maze[row][col] == 1) {
+            res.add(resStr);
+            return;
+        }
+
+        // Boundary and validity checks
+        if (row < 0 || col < 0 || row >= n || col >= n || maze[row][col] == 0 || temp[row][col] == 1) {
+            return;
+        }
+
+        // Mark current cell as visited
+        temp[row][col] = 1;
+
+        // Move Down
+        solve(maze, row + 1, col, temp, n, resStr + "D", res);
+
+        // Move Left
+        solve(maze, row, col - 1, temp, n, resStr + "L", res);
+
+        // Move Right
+        solve(maze, row, col + 1, temp, n, resStr + "R", res);
+
+        // Move Up
+        solve(maze, row - 1, col, temp, n, resStr + "U", res);
+
+        // Backtrack (unmark the cell)
+        temp[row][col] = 0;
+    }
+
+    public static void main(String[] args) {
+        int[][] maze = {
+            {1, 0, 0, 0},
+            {1, 1, 0, 1},
+            {1, 1, 0, 0},
+            {0, 1, 1, 1}
+        };
+        
+        List<String> res = new ArrayList<>();
+        int n = maze.length;
+        int[][] temp = new int[n][n];
+
+        if (maze[0][0] == 1)
+            solve(maze, 0, 0, temp, n, "", res);
+
+        if (res.isEmpty()) System.out.println("No path found");
+        else System.out.println("Possible paths: " + res);
+    }
+
+}
