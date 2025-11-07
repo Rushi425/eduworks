@@ -1,0 +1,45 @@
+package accenture;
+
+public class FindRymeWord {
+	
+	static public int findLengthMatched(String S, String word) {
+		int l = 0;
+		int n = word.length() - 1;
+		int sLength = S.length() - 1; 
+		while(n >= 0 && sLength >= 0 && S.charAt(sLength) == word.charAt(n)) {
+			n--;
+			sLength--;
+			l += 1;
+		}
+		return l;
+	}
+	
+	static public String findRymeWord(String S, String[] D) {
+		int resPos = -1;
+		int maxMatched = 0;
+		
+		for(int i = 0; i < D.length; i++) {
+			if(!S.equals(D[i])){
+				int currLength = findLengthMatched(S, D[i]);
+				if(currLength > maxMatched) {
+					resPos = i;
+					maxMatched = currLength;
+				}
+			}
+		}
+		if(resPos == -1 || maxMatched == 0) return "Not Found";
+		
+		return D[resPos];
+		
+	}
+
+	public static void main(String[] args) {
+		// a string S = word
+		// D array of string = vocabulary
+		String S = "der";
+		String[] D = {"puzzle", "thunder", "powder", "blender", "under"};
+		System.out.println("Ryme word for: " +S+ " is: "+ findRymeWord(S, D));
+
+	}
+
+}
